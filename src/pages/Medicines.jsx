@@ -109,7 +109,7 @@ const Medicines = () => {
     }
 
     try {
-      await axios.post("http://localhost:5000/api/medicines", form, {
+      await axios.post("https://medalert-backend2.onrender.com/api/medicines", form, {
         headers: { Authorization: `Bearer ${token}` },
       });
       alert("✅ Medicine added");

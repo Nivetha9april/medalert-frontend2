@@ -17,7 +17,7 @@ const UpdateProfile = () => {
   useEffect(() => {
     const fetchProfile = async () => {
       try {
-        const res = await axios.get("http://localhost:5000/api/users/me", {
+        const res = await axios.get("https://medalert-backend2.onrender.com/api/users/me", {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -40,7 +40,7 @@ const UpdateProfile = () => {
   const updateProfile = async () => {
     try {
       const res = await axios.put(
-        "http://localhost:5000/api/users/updateProfile",
+        "https://medalert-backend2.onrender.com/api/users/updateProfile",
         form,
         {
           headers: {
