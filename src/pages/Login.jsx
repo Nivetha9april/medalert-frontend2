@@ -64,7 +64,7 @@ const Login = () => {
     }
 
     try {
-      const res = await axios.post("http://localhost:5000/api/users/login", form);
+      const res = await axios.post("https://medalert-backend2.onrender.com/api/users/login", form);
       localStorage.setItem("token", res.data.token);
       alert("✅ Login Successful");
       navigate("/medicines");

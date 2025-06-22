@@ -55,7 +55,7 @@ const Register = () => {
       return;
     }
     try {
-      await axios.post("https://medalert-backend2.onrender.com/users/register", form);
+      await axios.post("https://medalert-backend2.onrender.com/api/users/register", form);
       alert("✅ Registration successful");
       navigate("/login");
     } catch (err) {
