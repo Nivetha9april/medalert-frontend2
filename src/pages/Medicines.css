@@ -1,0 +1,137 @@
+.medicine-container {
+  min-height: 100vh;
+  padding: 2rem;
+  font-family: 'Segoe UI', sans-serif;
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+  color: #fff;
+}
+
+/* Optional overlay for readability */
+.medicine-container::before {
+  content: "";
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background-color: rgba(0, 0, 0, 0.6);
+  z-index: 0;
+}
+
+.medicine-container > * {
+  position: relative;
+  z-index: 1;
+}
+
+h2 {
+  text-align: center;
+  font-size: 28px;
+  color: #ffffff;
+  margin-bottom: 1.5rem;
+}
+
+.search-box,
+.sort-select {
+  padding: 10px;
+  margin: 10px;
+  font-size: 1rem;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  background-color: #222;
+  color: #fff;
+}
+
+.add-medicine-form {
+  display: grid;
+  gap: 12px;
+  background: rgba(255, 255, 255, 0.1);
+  padding: 20px;
+  border-radius: 12px;
+  margin-bottom: 2rem;
+  box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.2);
+  width: 100%;
+  max-width: 700px;
+  backdrop-filter: blur(6px);
+}
+
+.add-medicine-form input,
+.add-medicine-form button {
+  padding: 10px;
+  font-size: 1rem;
+  border-radius: 6px;
+  border: none;
+  background: #333;
+  color: white;
+}
+
+.add-medicine-form input::placeholder {
+  color: #bbb;
+}
+
+.add-medicine-form button {
+  background-color: #4b4bff;
+  color: white;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+.add-medicine-form button:hover {
+  background-color: #3434dd;
+}
+
+.medicine-list {
+  display: grid;
+  gap: 1.5rem;
+  max-width: 900px;
+  width: 100%;
+}
+
+.medicine-card {
+  padding: 18px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.08);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+  backdrop-filter: blur(4px);
+  color: #fff;
+}
+
+.medicine-card h3 {
+  font-size: 20px;
+  margin-bottom: 8px;
+  color: #fff;
+}
+
+.medicine-card p {
+  margin: 4px 0;
+  color: #ddd;
+}
+
+.medicine-card::before {
+  content: "💊 ";
+  font-size: 20px;
+}
+
+.export-btn {
+  padding: 10px 20px;
+  background-color: #28a745;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-weight: bold;
+  cursor: pointer;
+  margin-bottom: 1.5rem;
+}
+
+.export-btn:hover {
+  background-color: #218838;
+}
+
+.error {
+  color: #ff4d4d;
+  text-align: center;
+  font-size: 0.9rem;
+}
