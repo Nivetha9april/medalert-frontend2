@@ -10,46 +10,59 @@ const Login = () => {
   const [error, setError] = useState("");
   const navigate = useNavigate();
 
-  useEffect(() => {
-    // 🔔 Request browser notification permission
-    if ("Notification" in window) {
-      Notification.requestPermission();
-    }
-
-    // ✅ Google Sign-In Initialization
-    /* global google */
-    if (window.google) {
-      google.accounts.id.initialize({
-        client_id: import.meta.env.VITE_GOOGLE_CLIENT_ID,
-        callback: handleGoogleResponse,
-      });
-
-      google.accounts.id.renderButton(document.getElementById("googleSignIn"), {
-        theme: "outline",
-        size: "large",
-        width: "300px",
-      });
-    }
-  }, []);
-
+  // ✅ Google Login Handler
   const handleGoogleResponse = async (response) => {
     try {
       const decoded = jwtDecode(response.credential);
-      const res = await axios.post("https://medalert-backend2.onrender.com/api/users/google-login", {
-        name: decoded.name,
-        email: decoded.email,
-        password: decoded.sub,
-        phone: "0000000000",
-      });
+      const res = await axios.post(
+        "https://medalert-backend-3-production.up.railway.app/api/users/google-login",
+        {
+          name: decoded.name,
+          email: decoded.email,
+          password: decoded.sub, // fallback password
+          phone: "0000000000",
+        }
+      );
 
       localStorage.setItem("token", res.data.token);
       alert("✅ Google Login Successful");
       navigate("/medicines");
     } catch (err) {
-      setError("Google login failed");
+      console.error("❌ Google Login Failed:", err);
+      setError("Google login failed. Please try again.");
     }
   };
 
+  // ✅ Initialize Google Button when script is loaded
+  useEffect(() => {
+    const googleInit = () => {
+      if (window.google && document.getElementById("googleSignIn")) {
+        window.google.accounts.id.initialize({
+          client_id: import.meta.env.VITE_GOOGLE_CLIENT_ID,
+          callback: handleGoogleResponse,
+        });
+
+        window.google.accounts.id.renderButton(
+          document.getElementById("googleSignIn"),
+          {
+            theme: "outline",
+            size: "large",
+            width: "300px",
+          }
+        );
+      }
+    };
+
+    if (document.readyState === "complete") {
+      googleInit();
+    } else {
+      window.addEventListener("load", googleInit);
+    }
+
+    return () => window.removeEventListener("load", googleInit);
+  }, []);
+
+  // ✅ Manual login
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
@@ -64,8 +77,12 @@ const Login = () => {
     }
 
     try {
-      const res = await axios.post("https://medalert-backend2.onrender.com/api/users/login", form);
+      const res = await axios.post(
+        "https://medalert-backend-3-production.up.railway.app/api/users/login",
+        form
+      );
       localStorage.setItem("token", res.data.token);
+      localStorage.setItem("userId", res.data.user._id);
       alert("✅ Login Successful");
       navigate("/medicines");
     } catch (err) {
@@ -103,8 +120,10 @@ const Login = () => {
         />
         <button type="submit">Login</button>
 
-        {/* ✅ Google Sign-In Button */}
-        <div id="googleSignIn" style={{ marginTop: "15px", display: "flex", justifyContent: "center" }}></div>
+        <div
+          id="googleSignIn"
+          style={{ marginTop: "15px", display: "flex", justifyContent: "center" }}
+        ></div>
 
         <p style={{ marginTop: "20px" }}>
           Don’t have an account?{" "}

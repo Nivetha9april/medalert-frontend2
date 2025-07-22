@@ -16,6 +16,7 @@ const Medicines = () => {
     startDate: "",
     expiryDate: "",
   });
+  const [editId, setEditId] = useState(null);
   const [search, setSearch] = useState("");
   const [sort, setSort] = useState("name");
   const [error, setError] = useState("");
@@ -25,7 +26,7 @@ const Medicines = () => {
   // ✅ Fetch Medicines
   const fetchMeds = async () => {
     try {
-      const res = await axios.get("https://medalert-backend2.onrender.com/api/medicines", {
+      const res = await axios.get("https://medalert-backend-3-production.up.railway.app/api/medicines", {
         headers: { Authorization: `Bearer ${token}` },
       });
       setMeds(res.data);
@@ -36,63 +37,55 @@ const Medicines = () => {
 
   // ✅ Notification Reminder Setup
   useEffect(() => {
-  fetchMeds();
+    fetchMeds();
 
-  // ✅ Ask for permission only if not yet granted or denied
-  if ("Notification" in window && Notification.permission === "default") {
-    Notification.requestPermission();
-  }
+    if ("Notification" in window && Notification.permission === "default") {
+      Notification.requestPermission();
+    }
 
-  // ✅ MEDICINE REMINDER every 5 minutes
-  const medReminderInterval = setInterval(() => {
-    const now = new Date();
-    const hour = now.getHours();
+    const medReminderInterval = setInterval(() => {
+      const now = new Date();
+      const hour = now.getHours();
 
-    // Trigger only at 9 AM, 2 PM, 9 PM
-    if ([9, 14, 21].includes(hour)) {
-      meds.forEach((med) => {
-        const start = new Date(med.startDate);
-        const expiry = new Date(med.expiryDate);
-        if (now >= start && now <= expiry) {
-          if (Notification.permission === "granted") {
-            new Notification(`💊 Time to take ${med.name}`, {
-              body: `Dosage: ${med.dosage}, Qty: ${med.quantity}`,
-              icon: "/icon.png",
-            });
+      if ([9, 14, 21].includes(hour)) {
+        meds.forEach((med) => {
+          const start = new Date(med.startDate);
+          const expiry = new Date(med.expiryDate);
+          if (now >= start && now <= expiry) {
+            if (Notification.permission === "granted") {
+              new Notification(`💊 Time to take ${med.name}`, {
+                body: `Dosage: ${med.dosage}, Qty: ${med.quantity}`,
+                icon: "/icon.png",
+              });
+            }
           }
-        }
-      });
-    }
-  }, 5 * 60 * 1000); // every 5 minutes
+        });
+      }
+    }, 5 * 60 * 1000);
 
-  // ✅ RANDOM HEALTH NOTIFICATION every 1 hour
-  const wellnessTips = [
-    "💧 Stay hydrated! Drink a glass of water.",
-    "🚶‍♀️ Stretch your legs and take a short walk.",
-    "😌 Take a deep breath and relax for a minute.",
-    "🍎 Time for a healthy snack break!",
-    "🧠 Rest your eyes. Blink a few times!",
-  ];
+    const wellnessTips = [
+      "💧 Stay hydrated! Drink a glass of water.",
+      "🚶‍♀️ Stretch your legs and take a short walk.",
+      "😌 Take a deep breath and relax for a minute.",
+      "🍎 Time for a healthy snack break!",
+      "🧠 Rest your eyes. Blink a few times!",
+    ];
 
-  const randomReminderInterval = setInterval(() => {
-    if (Notification.permission === "granted") {
-      const randomTip = wellnessTips[Math.floor(Math.random() * wellnessTips.length)];
-      new Notification("🩺 Health Tip", {
-        body: randomTip,
-        icon: "/icon.png",
-      });
-    }
-  }, 60 * 60 * 1000); // every 1 hour
+    const randomReminderInterval = setInterval(() => {
+      if (Notification.permission === "granted") {
+        const randomTip = wellnessTips[Math.floor(Math.random() * wellnessTips.length)];
+        new Notification("🩺 Health Tip", {
+          body: randomTip,
+          icon: "/icon.png",
+        });
+      }
+    }, 60 * 60 * 1000);
 
-  // ✅ Cleanup intervals when component unmounts
-  return () => {
-    clearInterval(medReminderInterval);
-    clearInterval(randomReminderInterval);
-  };
-}, [meds]);
-
-
-   
+    return () => {
+      clearInterval(medReminderInterval);
+      clearInterval(randomReminderInterval);
+    };
+  }, [meds]);
 
   const handleFormChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
@@ -109,10 +102,20 @@ const Medicines = () => {
     }
 
     try {
-      await axios.post("https://medalert-backend2.onrender.com/api/medicines", form, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
-      alert("✅ Medicine added");
+      if (editId) {
+        // ✏️ Update medicine
+        await axios.put("https://medalert-backend-3-production.up.railway.app/api/medicines/${editId}", form, {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+        alert("✏️ Medicine updated");
+      } else {
+        // ➕ Add medicine
+        await axios.post("https://medalert-backend-3-production.up.railway.app/api/medicines", form, {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+        alert("✅ Medicine added");
+      }
+
       setForm({
         name: "",
         dosage: "",
@@ -121,9 +124,10 @@ const Medicines = () => {
         startDate: "",
         expiryDate: "",
       });
+      setEditId(null);
       fetchMeds();
     } catch (err) {
-      setError("Error adding medicine.");
+      setError("Error saving medicine.");
     }
   };
 
@@ -171,7 +175,7 @@ const Medicines = () => {
       <h2>💊 Your Medicines</h2>
 
       <form className="add-medicine-form" onSubmit={handleAddMedicine}>
-        <h3>Add New Medicine</h3>
+        <h3>{editId ? "✏️ Edit Medicine" : "➕ Add New Medicine"}</h3>
         {error && <p className="error">{error}</p>}
         <input name="name" placeholder="Name" value={form.name} onChange={handleFormChange} />
         <input name="dosage" placeholder="Dosage" value={form.dosage} onChange={handleFormChange} />
@@ -179,7 +183,7 @@ const Medicines = () => {
         <input name="frequency" type="number" placeholder="Frequency (per day)" value={form.frequency} onChange={handleFormChange} />
         <input name="startDate" type="date" value={form.startDate} onChange={handleFormChange} />
         <input name="expiryDate" type="date" value={form.expiryDate} onChange={handleFormChange} />
-        <button type="submit">➕ Add Medicine</button>
+        <button type="submit">{editId ? "✏️ Update" : "➕ Add Medicine"}</button>
       </form>
 
       <input
@@ -205,6 +209,31 @@ const Medicines = () => {
             <p><b>Freq:</b> {med.frequency}/day</p>
             <p><b>Start:</b> {new Date(med.startDate).toLocaleDateString()}</p>
             <p><b>Expiry:</b> {new Date(med.expiryDate).toLocaleDateString()}</p>
+            <button onClick={() => {
+              setForm({
+                name: med.name,
+                dosage: med.dosage,
+                quantity: med.quantity,
+                frequency: med.frequency,
+                startDate: med.startDate.split("T")[0],
+                expiryDate: med.expiryDate.split("T")[0],
+              });
+              setEditId(med._id);
+            }}>✏️ Edit</button>
+            <button onClick={async () => {
+              const confirmDelete = window.confirm("Are you sure you want to delete this medicine?");
+              if (!confirmDelete) return;
+
+              try {
+                await axios.delete(`https://medalert-backend-3-production.up.railway.app/api/medicines/${med._id}`, {
+                  headers: { Authorization: `Bearer ${token}` },
+                });
+                alert("🗑️ Deleted!");
+                fetchMeds();
+              } catch (err) {
+                alert("Error deleting medicine.");
+              }
+            }}>🗑️ Delete</button>
           </div>
         ))}
       </div>

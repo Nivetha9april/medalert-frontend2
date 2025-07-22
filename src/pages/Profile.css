@@ -1,82 +1,57 @@
-.profile-container {
-  background-color: #ffffff;
-  border: 2px solid #b8c0ff;
+.profile-page {
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: url("../assets/medbg.jpg") no-repeat center center fixed;
+  background-size: cover;
+  padding: 1rem;
+  backdrop-filter: blur(3px);
+}
+
+.profile-box {
+  background-color: rgba(255, 255, 255, 0.9);
+  padding: 2rem;
   border-radius: 12px;
-  padding: 16px;
-  width: 250px;
-  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-  font-family: 'Segoe UI', sans-serif;
-}
-
-.profile-container h2 {
-  font-size: 18px;
-  color: #4b4bff;
-  margin-bottom: 10px;
-  text-align: center;
-}
-
-.profile-container input {
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.3);
   width: 100%;
-  padding: 8px;
-  margin: 5px 0;
-  border-radius: 6px;
-  border: 1px solid #ccc;
+  max-width: 400px;
 }
 
-.profile-container button {
-  width: 100%;
-  padding: 10px;
-  background-color: #4b4bff;
-  color: white;
-  border: none;
-  border-radius: 6px;
-  cursor: pointer;
-  transition: 0.2s;
-  margin-top: 8px;
-}
-
-.profile-container button:hover {
-  background-color: #3434dd;
-}
-/* Profile.css */
-.profile-container {
-  max-width: 500px;
-  margin: 50px auto;
-  padding: 30px;
-  background-color: #fdfdfd;
-  border-radius: 12px;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-  font-family: 'Segoe UI', sans-serif;
-}
-
-.profile-container h2 {
-  text-align: center;
+.profile-box h2 {
   margin-bottom: 20px;
-  font-size: 24px;
+  text-align: center;
+  color: #2b6cb0;
 }
 
-.profile-container input {
+.profile-box input {
   width: 100%;
-  padding: 12px;
-  margin: 10px 0;
-  border-radius: 6px;
+  padding: 0.75rem;
+  margin-bottom: 1rem;
   border: 1px solid #ccc;
-  font-size: 16px;
+  border-radius: 8px;
+  font-size: 1rem;
 }
 
-.profile-container button {
+.profile-box button {
   width: 100%;
-  padding: 12px;
-  background-color: #2e86de;
+  padding: 0.75rem;
+  background-color: #2b6cb0;
   color: white;
   border: none;
-  border-radius: 6px;
-  font-size: 18px;
+  border-radius: 8px;
+  font-size: 1rem;
   cursor: pointer;
-  transition: background-color 0.3s ease;
+  transition: background-color 0.3s;
 }
 
-.profile-container button:hover {
-  background-color: #1b4f72;
+.profile-box button:hover {
+  background-color: #1a4e80;
 }
 
+.loading {
+  font-size: 1.5rem;
+  color: #333;
+  text-align: center;
+  margin-top: 100px;
+}

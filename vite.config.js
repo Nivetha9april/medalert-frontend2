@@ -7,5 +7,9 @@ export default defineConfig({
     port: 5173,
     host: 'localhost',
     strictPort: true,
+     headers: {
+      
+      'Cross-Origin-Embedder-Policy': 'require-corp',
+    },
   },
 });

@@ -1,15 +1,39 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
   <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>MedAlert</title>
+    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+
+    <!-- ✅ Google Sign-In Client -->
     <script src="https://accounts.google.com/gsi/client" async defer></script>
 
-    <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Vite + React</title>
+    <!-- ✅ Firebase Service Worker Registration -->
+    <script>
+      if ("serviceWorker" in navigator) {
+        navigator.serviceWorker
+          .register("/firebase-messaging-sw.js")
+          .then((registration) => {
+            console.log("✅ Service Worker registered:", registration);
+          })
+          .catch((err) => {
+            console.error("❌ Service Worker registration failed:", err);
+          });
+      }
+      
+  window.onload = () => {
+    console.log("✅ Google Identity script loaded:", window.google);
+  };
+
+
+    </script>
   </head>
+
   <body>
+    
     <div id="root"></div>
+    <!-- ✅ Mount your React app -->
     <script type="module" src="/src/main.jsx"></script>
   </body>
 </html>

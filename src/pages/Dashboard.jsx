@@ -10,7 +10,7 @@ const Dashboard = () => {
   useEffect(() => {
     const fetchMeds = async () => {
       try {
-        const res = await axios.get("https://medalert-backend2.onrender.com/api/medicines");
+        const res = await axios.get("https://medalert-backend-3-production.up.railway.app/api/users/Medicines");
         setMeds(res.data);
       } catch (err) {
         console.error("Error loading medicine summary:", err);
@@ -26,6 +26,7 @@ const Dashboard = () => {
     const diff = (exp - now) / (1000 * 60 * 60 * 24);
     return diff < 7;
   });
+  
 
   return (
     <div className="dashboard-container">
