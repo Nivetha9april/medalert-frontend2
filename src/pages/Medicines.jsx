@@ -104,7 +104,7 @@ const Medicines = () => {
     try {
       if (editId) {
         // ✏️ Update medicine
-        await axios.put("https://medalert-backend-3-production.up.railway.app/api/medicines/${editId}", form, {
+        await axios.put(`https://medalert-backend-3-production.up.railway.app/api/medicines/${editId}`, form, {
           headers: { Authorization: `Bearer ${token}` },
         });
         alert("✏️ Medicine updated");
